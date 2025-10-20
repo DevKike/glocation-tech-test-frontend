@@ -1,74 +1,69 @@
-<div class="table-container">
-  <p-table
-    [value]="projects"
-    [paginator]="true"
-    [rows]="10"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} projects"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    styleClass="p-datatable-striped"
-    [tableStyle]="{ 'min-width': '50rem' }"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Status</th>
-        <th>Start Date</th>
-        <th>Finish Date</th>
-        <th style="width: 150px">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-project>
-      <tr>
-        <td>{{ project.id }}</td>
-        <td>{{ project.name }}</td>
-        <td>{{ project.description }}</td>
-        <td>
-          <span
-            [class]="
-              'status-badge status-' +
-              project.status.toLowerCase().replace(' ', '_')
-            "
-          >
-            {{ project.status }}
-          </span>
-        </td>
-        <td>{{ project.startDate | date : "short" }}</td>
-        <td>
-          {{
-            project.finishDate ? (project.finishDate | date : "short") : "N/A"
-          }}
-        </td>
-        <td>
-          <div class="action-buttons">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-text p-button-info"
-              pTooltip="Edit project"
-              tooltipPosition="top"
-              (click)="onEdit(project)"
-            ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-text p-button-danger"
-              pTooltip="Delete project"
-              tooltipPosition="top"
-              (click)="onDelete(project)"
-            ></button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="7" class="text-center">No projects found</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+<p-table
+  [value]="projects"
+  [paginator]="true"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} projects"
+  [rowsPerPageOptions]="[5, 10, 25, 50]"
+  [tableStyle]="{ 'min-width': '100%' }"
+  styleClass="p-datatable-sm"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 70px">ID</th>
+      <th style="width: 200px">NAME</th>
+      <th style="width: auto; min-width: 250px">DESCRIPTION</th>
+      <th style="width: 140px">STATUS</th>
+      <th style="width: 160px">START DATE</th>
+      <th style="width: 160px">FINISH DATE</th>
+      <th style="width: 120px">ACTIONS</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-project>
+    <tr>
+      <td>{{ project.id }}</td>
+      <td style="font-weight: 600">{{ project.name }}</td>
+      <td style="text-align: left; padding-left: 1.5rem">
+        {{ project.description }}
+      </td>
+      <td>
+        <span
+          class="status-badge"
+          [ngClass]="{
+            'status-finished': project.status === 'Finished',
+            'status-in-progress': project.status === 'In progress',
+          }"
+        >
+          <span class="status-dot"></span>
+          {{ project.status }}
+        </span>
+      </td>
+      <td>{{ project.startDate | date : "M/d/yy, h:mm a" }}</td>
+      <td>
+        {{
+          project.finishDate
+            ? (project.finishDate | date : "M/d/yy, h:mm a")
+            : "N/A"
+        }}
+      </td>
+      <td class="actions-column">
+        <button
+          class="action-button edit-button"
+          (click)="onEdit(project)"
+          pTooltip="Edit project"
+          tooltipPosition="top"
+        >
+          <i class="pi pi-pencil"></i>
+        </button>
+        <button
+          class="action-button delete-button"
+          (click)="onDelete(project)"
+          pTooltip="Delete project"
+          tooltipPosition="top"
+        >
+          <i class="pi pi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

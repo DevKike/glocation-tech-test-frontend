@@ -7,24 +7,23 @@
   [resizable]="false"
   (onHide)="onHide()"
 >
-  <div class="form-container">
+  <form [formGroup]="projectForm" class="form-container">
     <div class="field">
       <label for="name">Project Name *</label>
       <input
         id="name"
         type="text"
         pInputText
-        [ngModel]="
-          mode === 'create' ? createFormData.name : updateFormData.name
-        "
-        (ngModelChange)="
-          mode === 'create'
-            ? (createFormData.name = $event)
-            : (updateFormData.name = $event)
-        "
-        placeholder="Enter project name"
+        formControlName="name"
+        placeholder="Enter project name (min. 5 characters)"
         class="w-full"
+        [class.p-invalid]="
+          projectForm.get('name')?.invalid && projectForm.get('name')?.touched
+        "
       />
+      <small class="p-error" *ngIf="getErrorMessage('name')">
+        {{ getErrorMessage("name") }}
+      </small>
     </div>
 
     <div class="field">
@@ -32,26 +31,25 @@
       <textarea
         id="description"
         rows="4"
-        pTextarea
-        [ngModel]="
-          mode === 'create'
-            ? createFormData.description
-            : updateFormData.description
-        "
-        (ngModelChange)="
-          mode === 'create'
-            ? (createFormData.description = $event)
-            : (updateFormData.description = $event)
-        "
-        placeholder="Enter project description"
+        pInputTextarea
+        formControlName="description"
+        placeholder="Enter project description (min. 5 characters)"
         class="w-full"
+        [class.p-invalid]="
+          projectForm.get('description')?.invalid &&
+          projectForm.get('description')?.touched
+        "
       ></textarea>
+      <small class="p-error" *ngIf="getErrorMessage('description')">
+        {{ getErrorMessage("description") }}
+      </small>
     </div>
+
     <div class="field" *ngIf="mode === 'edit'">
-      <label for="status">Status *</label>
+      <label for="status">Status</label>
       <p-dropdown
         id="status"
-        [(ngModel)]="updateFormData.status"
+        formControlName="status"
         [options]="statusOptions"
         optionLabel="label"
         optionValue="value"
@@ -68,7 +66,7 @@
         You can only mark this project as finished.
       </small>
     </div>
-  </div>
+  </form>
 
   <ng-template pTemplate="footer">
     <app-button

@@ -5,6 +5,7 @@ import {
   IProject,
   ICreateProject,
   IUpdateProject,
+  IGetProjectResponse,
 } from '../../modules/shared/interfaces/project.interface';
 import { IApiResponse } from '../../modules/shared/interfaces/api-response.interface';
 import { delay, firstValueFrom } from 'rxjs';
@@ -21,25 +22,15 @@ export class HomeComponent implements OnInit {
   @ViewChild(ToastComponent) toast!: ToastComponent;
 
   projects: IProject[] = [];
+  feedback: IGetProjectResponse['feedback'] | null = null;
   displayCreateDialog: boolean = false;
   displayEditDialog: boolean = false;
   selectedProject: IProject | null = null;
   isLoading: boolean = false;
 
-  headerMenuItems: any[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home',
-    },
-    {
-      label: 'Projects',
-      icon: 'pi pi-briefcase',
-    },
-    {
-      label: 'Reports',
-      icon: 'pi pi-chart-bar',
-    },
-  ];
+  statusChartData: any;
+  projectsOverTimeData: any;
+  completionRateData: any;
 
   constructor(
     private readonly _httpService: HttpService,
@@ -55,22 +46,80 @@ export class HomeComponent implements OnInit {
 
     try {
       const response = await firstValueFrom(
-        this._httpService.get<IApiResponse<IProject[]>>(
+        this._httpService.get<IApiResponse<IGetProjectResponse>>(
           API_ENDPOINT.PROJECT.GET_ALL
         )
       );
 
-      this.projects = [...response.data];
+      this.projects = response.data.projects;
+      this.feedback = response.data.feedback;
+
+      this.prepareChartData();
 
       this.cdr.detectChanges();
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 900));
       this.isLoading = false;
     } catch (err) {
-      console.error('Error fetching projects:', err);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 900));
       this.isLoading = false;
     }
+  }
+
+  prepareChartData() {
+    if (!this.feedback) return;
+
+    this.statusChartData = {
+      labels: ['Completed', 'In Progress'],
+      datasets: [
+        {
+          data: [
+            this.feedback.stats.finishedPercentage,
+            this.feedback.stats.inProgressPercentage,
+          ],
+          backgroundColor: ['#10b981', '#f59e0b', '#6366f1'],
+          hoverBackgroundColor: ['#059669', '#d97706', '#4f46e5'],
+          borderWidth: 2,
+          borderColor: '#ffffff',
+        },
+      ],
+    };
+
+    this.projectsOverTimeData = {
+      labels: ['Finished', 'In Progress'],
+      datasets: [
+        {
+          label: 'Number of Projects',
+          data: [
+            this.getProjectsByStatus('Finished'),
+            this.getProjectsByStatus('In progress'),
+          ],
+          backgroundColor: ['#10b981', '#f59e0b', '#6366f1'],
+          borderColor: ['#059669', '#d97706', '#4f46e5'],
+          borderWidth: 2,
+          borderRadius: 8,
+        },
+      ],
+    };
+
+    this.completionRateData = {
+      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      datasets: [
+        {
+          label: 'Completion Rate (%)',
+          data: [20, 35, 55, this.feedback.stats.finishedPercentage],
+          fill: true,
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102, 126, 234, 0.2)',
+          tension: 0.4,
+          pointBackgroundColor: '#667eea',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+      ],
+    };
   }
 
   openCreateDialog() {
@@ -79,21 +128,21 @@ export class HomeComponent implements OnInit {
 
   async handleCreate(projectData: ICreateProject | IUpdateProject) {
     this.isLoading = true;
+
     try {
       await firstValueFrom(
         this._httpService.post<ICreateProject, IApiResponse<IProject>>(
           API_ENDPOINT.PROJECT.CREATE,
-          projectData as ICreateProject // ✅ Cast a ICreateProject
+          projectData as ICreateProject
         )
       );
-      this.displayCreateDialog = false;
 
+      this.displayCreateDialog = false;
       this.isLoading = false;
       await this.getData();
 
       this.toast.showSuccess('Success', 'Project created successfully');
     } catch (err) {
-      console.error('Error creating project:', err);
       this.toast.showError('Error', 'Failed to create project');
       this.isLoading = false;
     }
@@ -126,7 +175,6 @@ export class HomeComponent implements OnInit {
 
       this.toast.showSuccess('Success', 'Project updated successfully');
     } catch (err) {
-      console.error('❌ Error updating project:', err);
       this.toast.showError('Error', 'Failed to update project');
     }
   }
@@ -168,18 +216,12 @@ export class HomeComponent implements OnInit {
         `Project "${project.name}" deleted successfully`
       );
     } catch (err) {
-      console.error('Error deleting project:', err);
       this.toast.showError('Error', 'Failed to delete project');
       this.isLoading = false;
     }
   }
+
   getProjectsByStatus(status: string): number {
     return this.projects.filter((p) => p.status === status).length;
-  }
-
-  getSuccessRate(): number {
-    if (this.projects.length === 0) return 0;
-    const finished = this.getProjectsByStatus('Finished');
-    return Math.round((finished / this.projects.length) * 100);
   }
 }

@@ -29,19 +29,15 @@ export class ButtonComponent {
   get buttonClass(): string {
     let classes = [];
 
-    // Severity
     if (this.severity !== 'primary') {
       classes.push(`p-button-${this.severity}`);
     }
-
-    // Size
     if (this.size === 'small') {
       classes.push('p-button-sm');
     } else if (this.size === 'large') {
       classes.push('p-button-lg');
     }
 
-    // Variants
     if (this.rounded) {
       classes.push('p-button-rounded');
     }

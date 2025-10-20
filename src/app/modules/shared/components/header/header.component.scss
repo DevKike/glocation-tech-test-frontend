@@ -4,12 +4,15 @@
     top: 0;
     z-index: 1000;
     margin: 0;
+    margin-bottom: 2rem;
+
 }
 
 .header-title {
     font-weight: 600;
     font-size: 1.2rem;
-    margin-left: 1rem;
+    margin-left: 0;
+
 }
 
 ::ng-deep {
@@ -19,6 +22,22 @@
             border: none;
             border-bottom: 1px solid #dee2e6;
             margin: 0;
+            padding: 1rem 1.5rem;
+
+
+            .p-menubar-end {
+                margin-left: 0 !important;
+
+                order: -1;
+
+                flex-grow: 1;
+
+            }
+
+            .p-menubar-start {
+                margin-left: auto;
+
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ICreateProject,
   IProject,
@@ -23,35 +24,49 @@ export class FormDialogComponent implements OnChanges {
   @Input() mode: 'create' | 'edit' = 'create';
   @Input() project: IProject | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() onSave = new EventEmitter<ICreateProject | IUpdateProject>();
+  @Output() onSave = new EventEmitter<
+    Partial<ICreateProject | IUpdateProject>
+  >();
   @Output() onCancel = new EventEmitter<void>();
 
-  createFormData: ICreateProject = {
-    name: '',
-    description: '',
-  };
-
-  updateFormData: IUpdateProject = {
-    name: '',
-    description: '',
-    status: PROJECT_STATUS.IN_PROGRESS,
-  };
+  projectForm!: FormGroup;
 
   statusOptions = [{ label: 'Finished', value: PROJECT_STATUS.FINISHED }];
+
+  constructor(private fb: FormBuilder) {
+    this.initForm();
+  }
+
+  initForm() {
+    this.projectForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(5)]],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(70),
+        ],
+      ],
+      status: [PROJECT_STATUS.IN_PROGRESS],
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['visible'] && this.visible) {
       if (this.mode === 'edit' && this.project) {
-        this.updateFormData = {
+        this.projectForm.patchValue({
           name: this.project.name,
           description: this.project.description,
           status: this.project.status,
-        };
+        });
+        this.projectForm.markAsPristine();
       } else if (this.mode === 'create') {
-        this.createFormData = {
+        this.projectForm.reset({
           name: '',
           description: '',
-        };
+          status: PROJECT_STATUS.IN_PROGRESS,
+        });
       }
     }
   }
@@ -64,34 +79,66 @@ export class FormDialogComponent implements OnChanges {
 
   get isFormValid(): boolean {
     if (this.mode === 'create') {
-      return (
-        !!this.createFormData.name?.trim() &&
-        !!this.createFormData.description?.trim()
-      );
+      return this.projectForm.valid;
     } else {
-      return (
-        !!this.updateFormData.name?.trim() &&
-        !!this.updateFormData.description?.trim() &&
-        !!this.updateFormData.status
-      );
+      return this.projectForm.valid && this.projectForm.dirty;
     }
   }
 
   get canChangeStatus(): boolean {
-    const result =
-      this.mode === 'edit' && this.project?.status !== PROJECT_STATUS.FINISHED;
+    return (
+      this.mode === 'edit' && this.project?.status !== PROJECT_STATUS.FINISHED
+    );
+  }
 
-    return result;
+  getErrorMessage(fieldName: string): string {
+    const control = this.projectForm.get(fieldName);
+    if (!control || !control.errors || !control.touched) return '';
+
+    if (control.errors['required']) {
+      return `${
+        fieldName === 'name' ? 'Project name' : 'Description'
+      } is required`;
+    }
+
+    if (control.errors['minlength']) {
+      return `${
+        fieldName === 'name' ? 'Project name' : 'Description'
+      } must be at least 5 characters`;
+    }
+
+    return '';
   }
 
   save() {
-    if (this.isFormValid) {
-      const dataToSave =
-        this.mode === 'create' ? this.createFormData : this.updateFormData;
+    if (!this.isFormValid) return;
 
-      this.onSave.emit(dataToSave);
-      this.closeDialog();
+    if (this.mode === 'create') {
+      const createData: ICreateProject = {
+        name: this.projectForm.value.name,
+        description: this.projectForm.value.description,
+      };
+
+      this.onSave.emit(createData);
+    } else {
+      const changedData: Partial<IUpdateProject> = {};
+
+      if (this.projectForm.get('name')?.dirty) {
+        changedData.name = this.projectForm.value.name;
+      }
+
+      if (this.projectForm.get('description')?.dirty) {
+        changedData.description = this.projectForm.value.description;
+      }
+
+      if (this.projectForm.get('status')?.dirty) {
+        changedData.status = this.projectForm.value.status;
+      }
+
+      this.onSave.emit(changedData);
     }
+
+    this.closeDialog();
   }
 
   cancel() {
@@ -102,19 +149,7 @@ export class FormDialogComponent implements OnChanges {
   closeDialog() {
     this.visible = false;
     this.visibleChange.emit(false);
-    this.resetForm();
-  }
-
-  resetForm() {
-    this.createFormData = {
-      name: '',
-      description: '',
-    };
-    this.updateFormData = {
-      name: '',
-      description: '',
-      status: PROJECT_STATUS.IN_PROGRESS,
-    };
+    this.projectForm.reset();
   }
 
   onHide() {

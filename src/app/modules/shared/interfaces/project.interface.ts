@@ -1,4 +1,5 @@
 import { PROJECT_STATUS } from '../enums/project-status.enum';
+import { IFeedbackResponse } from './feedback-response.interface';
 
 export interface IProject {
   id: number;
@@ -7,6 +8,11 @@ export interface IProject {
   status: PROJECT_STATUS;
   startDate: string;
   finishDate: string;
+}
+
+export interface IGetProjectResponse {
+  feedback: IFeedbackResponse;
+  projects: IProject[];
 }
 
 export interface ICreateProject

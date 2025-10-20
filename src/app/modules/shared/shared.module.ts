@@ -12,7 +12,7 @@ import { FormDialogComponent } from './components/form-dialog/form-dialog.compon
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Textarea } from 'primeng/inputtextarea';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from './components/button/button.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -22,6 +22,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastComponent } from './components/toast/toast.component';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
+import { ChartComponent } from './components/chart/chart.component';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -33,10 +35,12 @@ import { DropdownModule } from 'primeng/dropdown';
     LoadingComponent,
     ConfirmDialogComponent,
     ToastComponent,
+    ChartComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     CardModule,
     TableModule,
     MenubarModule,
@@ -50,6 +54,7 @@ import { DropdownModule } from 'primeng/dropdown';
     ConfirmDialogModule,
     ToastModule,
     DropdownModule,
+    ChartModule,
   ],
   exports: [
     CardComponent,
@@ -60,6 +65,7 @@ import { DropdownModule } from 'primeng/dropdown';
     LoadingComponent,
     ConfirmDialogComponent,
     ToastComponent,
+    ChartComponent,
   ],
 })
 export class SharedModule {}

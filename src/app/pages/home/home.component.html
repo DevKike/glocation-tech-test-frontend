@@ -8,53 +8,94 @@
 <app-header title="Project Management System"></app-header>
 
 <div class="home-container">
-  <div class="hero-section">
-    <h1 class="hero-title">Welcome to Your Project Dashboard</h1>
-    <p class="hero-subtitle">
-      Manage, track, and deliver your projects with ease
-    </p>
+  <div class="insights-section" *ngIf="feedback">
+    <div class="insights-card">
+      <div class="insights-header">
+        <div class="insights-icon">
+          <i class="pi pi-sparkles"></i>
+        </div>
+        <div class="insights-title">
+          <h3>AI-Powered Insights</h3>
+          <p class="insights-subtitle">
+            Smart analysis of your project portfolio
+          </p>
+        </div>
+      </div>
+      <p class="insights-summary">{{ feedback.summary }}</p>
+      <div class="insights-stats">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="pi pi-briefcase"></i>
+          </div>
+          <span class="stat-value">{{ feedback.stats.totalProjects }}</span>
+          <span class="stat-label">Total Projects</span>
+        </div>
+        <div class="stat-item success">
+          <div class="stat-icon">
+            <i class="pi pi-check-circle"></i>
+          </div>
+          <span class="stat-value"
+            >{{ feedback.stats.finishedPercentage }}%</span
+          >
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-item warning">
+          <div class="stat-icon">
+            <i class="pi pi-clock"></i>
+          </div>
+          <span class="stat-value"
+            >{{ feedback.stats.inProgressPercentage }}%</span
+          >
+          <span class="stat-label">In Progress</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="stats-grid">
-    <app-card
-      header="Total Projects"
-      width="100%"
-      height="150px"
-      padding="1.5rem"
-    >
-      <div class="stat-content">
-        <i class="pi pi-briefcase stat-icon"></i>
-        <span class="stat-number">{{ projects.length }}</span>
-      </div>
-    </app-card>
+  <div class="charts-section" *ngIf="feedback">
+    <div class="charts-grid">
+      <app-card
+        header="Status Distribution"
+        subheader="Overview of project completion"
+        width="100%"
+        height="auto"
+        padding="1.5rem"
+      >
+        <app-chart
+          type="doughnut"
+          [data]="statusChartData"
+          height="350px"
+        ></app-chart>
+      </app-card>
 
-    <app-card header="In Progress" width="100%" height="150px" padding="1.5rem">
-      <div class="stat-content">
-        <i class="pi pi-clock stat-icon"></i>
-        <span class="stat-number">{{
-          getProjectsByStatus("In progress")
-        }}</span>
-      </div>
-    </app-card>
+      <app-card
+        header="Projects by Status"
+        subheader="Number of projects in each stage"
+        width="100%"
+        height="auto"
+        padding="1.5rem"
+      >
+        <app-chart
+          type="bar"
+          [data]="projectsOverTimeData"
+          height="350px"
+        ></app-chart>
+      </app-card>
 
-    <app-card header="Completed" width="100%" height="150px" padding="1.5rem">
-      <div class="stat-content">
-        <i class="pi pi-check-circle stat-icon success"></i>
-        <span class="stat-number">{{ getProjectsByStatus("Finished") }}</span>
-      </div>
-    </app-card>
-
-    <app-card
-      header="Success Rate"
-      width="100%"
-      height="150px"
-      padding="1.5rem"
-    >
-      <div class="stat-content">
-        <i class="pi pi-chart-line stat-icon"></i>
-        <span class="stat-number">{{ getSuccessRate() }}%</span>
-      </div>
-    </app-card>
+      <app-card
+        header="Completion Trend"
+        subheader="Project completion over time"
+        width="100%"
+        height="auto"
+        padding="1.5rem"
+      >
+        <app-chart
+          type="line"
+          [data]="completionRateData"
+          height="350px"
+        ></app-chart>
+      </app-card>
+    </div>
   </div>
 
   <app-card
@@ -62,22 +103,28 @@
     subheader="Manage and track all your projects in one place"
     width="100%"
     height="auto"
-    padding="1.5rem"
+    padding="0"
   >
-    <div class="table-header">
-      <app-button
-        label="New Project"
-        icon="pi pi-plus"
-        severity="success"
-        (onClick)="openCreateDialog()"
-      ></app-button>
-    </div>
+    <div class="table-content">
+      <div class="table-header">
+        <div class="table-info">
+          <h2>Projects List</h2>
+          <p class="table-count">{{ projects.length }} total projects</p>
+        </div>
+        <app-button
+          label="New Project"
+          icon="pi pi-plus"
+          severity="success"
+          (onClick)="openCreateDialog()"
+        ></app-button>
+      </div>
 
-    <app-table
-      [projects]="projects"
-      (editProject)="handleEdit($event)"
-      (deleteProject)="handleDelete($event)"
-    ></app-table>
+      <app-table
+        [projects]="projects"
+        (editProject)="handleEdit($event)"
+        (deleteProject)="handleDelete($event)"
+      ></app-table>
+    </div>
   </app-card>
 </div>
 
