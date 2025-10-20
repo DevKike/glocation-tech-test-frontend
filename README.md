@@ -1,27 +1,87 @@
-# GlocationTechTestFrontend
+# 🌐 glocation-tech-test-frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+Frontend application built with **Angular 18**, using **NgModules** and **PrimeNG 18** for the user interface.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🚀 Getting Started
 
-## Code scaffolding
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/glocation-tech-test-frontend.git
+cd glocation-tech-test-frontend
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-## Build
+This will install all required dependencies listed in the `package.json` file.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## ⚙️ Environment Configuration
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The backend API URL is defined inside the environment configuration files.
 
-## Running end-to-end tests
+Example for development (`src/environments/environment.ts`):
+```typescript
+export const ENVIRONMENT = {
+  PRODUCTION: false,
+  API_URL: 'http://localhost:3000/api/v1',
+};
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+For production (`src/environments/environment.prod.ts`):
+```typescript
+export const ENVIRONMENT = {
+  PRODUCTION: true,
+  API_URL: 'https://your-production-domain.com/api/v1',
+};
+```
 
-## Further help
+You can update these URLs depending on your backend configuration.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 🧩 Available Scripts
+
+### 🧪 Development Server
+```bash
+npm start
+```
+or
+```bash
+ng serve
+```
+This will start the application at [http://localhost:4200](http://localhost:4200).  
+The app will automatically reload if you change any source files.
+
+---
+
+## 🧠 Project Notes
+
+- The project uses **Angular Modules** for scalable structure.  
+- **PrimeNG 18** is integrated for UI components and theming.  
+- The environment files control backend connectivity (`API_URL`).  
+- Make sure your backend (`glocation-tech-test-backend`) is running before using the app in dev mode.
+
+---
+
+## 🧰 Tech Stack
+
+| Technology | Version | Description |
+|-------------|----------|-------------|
+| **Angular** | 18.x | Frontend framework |
+| **PrimeNG** | 18.x | UI component library |
+| **TypeScript** | Latest | Language for Angular |
+| **RxJS** | Latest | Reactive programming |
+| **Node.js / npm** | LTS | Dependency management and scripts |
+
+---
+
+## 🧑‍💻 Author
+
+Developed by **Álvaro Narváez**  
+For the **Glocation Technical Test**
