@@ -1,0 +1,100 @@
+<app-loading
+  [visible]="isLoading"
+  message="Loading"
+  [overlay]="true"
+  strokeWidth="4"
+></app-loading>
+
+<app-header title="Project Management System"></app-header>
+
+<div class="home-container">
+  <div class="hero-section">
+    <h1 class="hero-title">Welcome to Your Project Dashboard</h1>
+    <p class="hero-subtitle">
+      Manage, track, and deliver your projects with ease
+    </p>
+  </div>
+
+  <div class="stats-grid">
+    <app-card
+      header="Total Projects"
+      width="100%"
+      height="150px"
+      padding="1.5rem"
+    >
+      <div class="stat-content">
+        <i class="pi pi-briefcase stat-icon"></i>
+        <span class="stat-number">{{ projects.length }}</span>
+      </div>
+    </app-card>
+
+    <app-card header="In Progress" width="100%" height="150px" padding="1.5rem">
+      <div class="stat-content">
+        <i class="pi pi-clock stat-icon"></i>
+        <span class="stat-number">{{
+          getProjectsByStatus("In progress")
+        }}</span>
+      </div>
+    </app-card>
+
+    <app-card header="Completed" width="100%" height="150px" padding="1.5rem">
+      <div class="stat-content">
+        <i class="pi pi-check-circle stat-icon success"></i>
+        <span class="stat-number">{{ getProjectsByStatus("Finished") }}</span>
+      </div>
+    </app-card>
+
+    <app-card
+      header="Success Rate"
+      width="100%"
+      height="150px"
+      padding="1.5rem"
+    >
+      <div class="stat-content">
+        <i class="pi pi-chart-line stat-icon"></i>
+        <span class="stat-number">{{ getSuccessRate() }}%</span>
+      </div>
+    </app-card>
+  </div>
+
+  <app-card
+    header="All Projects"
+    subheader="Manage and track all your projects in one place"
+    width="100%"
+    height="auto"
+    padding="1.5rem"
+  >
+    <div class="table-header">
+      <app-button
+        label="New Project"
+        icon="pi pi-plus"
+        severity="success"
+        (onClick)="openCreateDialog()"
+      ></app-button>
+    </div>
+
+    <app-table
+      [projects]="projects"
+      (editProject)="handleEdit($event)"
+      (deleteProject)="handleDelete($event)"
+    ></app-table>
+  </app-card>
+</div>
+
+<app-form-dialog
+  [(visible)]="displayCreateDialog"
+  [mode]="'create'"
+  (onSave)="handleCreate($event)"
+  (onCancel)="handleCancelCreate()"
+></app-form-dialog>
+
+<app-form-dialog
+  [(visible)]="displayEditDialog"
+  [mode]="'edit'"
+  [project]="selectedProject"
+  (onSave)="handleUpdate($event)"
+  (onCancel)="handleCancelEdit()"
+></app-form-dialog>
+
+<app-confirm-dialog></app-confirm-dialog>
+<app-toast></app-toast>

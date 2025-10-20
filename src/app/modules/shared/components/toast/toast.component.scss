@@ -1,0 +1,80 @@
+/* filepath: /home/devkike/Documents/Projects/Personal/glocation-tech-test-frontend/src/app/modules/shared/components/toast/toast.component.scss */
+::ng-deep {
+    .p-toast {
+        opacity: 1;
+
+        .p-toast-message {
+            margin: 0 0 1rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+
+            .p-toast-message-content {
+                padding: 1rem;
+
+                .p-toast-message-icon {
+                    font-size: 1.5rem;
+                }
+
+                .p-toast-summary {
+                    font-weight: 700;
+                    font-size: 1rem;
+                }
+
+                .p-toast-detail {
+                    margin: 0.5rem 0 0 0;
+                    font-size: 0.9rem;
+                }
+            }
+
+            &.p-toast-message-success {
+                background: #10b981;
+                border: solid #059669;
+                border-width: 0 0 0 6px;
+                color: #ffffff;
+
+                .p-toast-message-icon,
+                .p-toast-icon-close {
+                    color: #ffffff;
+                }
+            }
+
+            &.p-toast-message-error {
+                background: #ef4444;
+                border: solid #dc2626;
+                border-width: 0 0 0 6px;
+                color: #ffffff;
+
+                .p-toast-message-icon,
+                .p-toast-icon-close {
+                    color: #ffffff;
+                }
+            }
+
+            &.p-toast-message-warn {
+                background: #f59e0b;
+                border: solid #d97706;
+                border-width: 0 0 0 6px;
+                color: #ffffff;
+
+                .p-toast-message-icon,
+                .p-toast-icon-close {
+                    color: #ffffff;
+                }
+            }
+
+            &.p-toast-message-info {
+                background: #3b82f6;
+                border: solid #2563eb;
+                border-width: 0 0 0 6px;
+                color: #ffffff;
+
+                .p-toast-message-icon,
+                .p-toast-icon-close {
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+}

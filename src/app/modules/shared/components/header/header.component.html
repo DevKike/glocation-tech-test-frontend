@@ -1,0 +1,14 @@
+<p-menubar [model]="menuItems">
+  <ng-template pTemplate="start">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-bars"
+      class="p-button-text p-button-plain"
+      *ngIf="showMenuButton"
+    ></button>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <span class="header-title">{{ title }}</span>
+  </ng-template>
+</p-menubar>

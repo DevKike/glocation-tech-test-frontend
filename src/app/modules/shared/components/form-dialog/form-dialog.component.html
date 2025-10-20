@@ -1,0 +1,89 @@
+<p-dialog
+  [(visible)]="visible"
+  [header]="dialogHeader"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="onHide()"
+>
+  <div class="form-container">
+    <div class="field">
+      <label for="name">Project Name *</label>
+      <input
+        id="name"
+        type="text"
+        pInputText
+        [ngModel]="
+          mode === 'create' ? createFormData.name : updateFormData.name
+        "
+        (ngModelChange)="
+          mode === 'create'
+            ? (createFormData.name = $event)
+            : (updateFormData.name = $event)
+        "
+        placeholder="Enter project name"
+        class="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        rows="4"
+        pTextarea
+        [ngModel]="
+          mode === 'create'
+            ? createFormData.description
+            : updateFormData.description
+        "
+        (ngModelChange)="
+          mode === 'create'
+            ? (createFormData.description = $event)
+            : (updateFormData.description = $event)
+        "
+        placeholder="Enter project description"
+        class="w-full"
+      ></textarea>
+    </div>
+    <div class="field" *ngIf="mode === 'edit'">
+      <label for="status">Status *</label>
+      <p-dropdown
+        id="status"
+        [(ngModel)]="updateFormData.status"
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        [disabled]="!canChangeStatus"
+        placeholder="Select a status"
+        [style]="{ width: '100%' }"
+      ></p-dropdown>
+      <small class="status-hint" *ngIf="!canChangeStatus">
+        <i class="pi pi-info-circle"></i>
+        This project is already finished and cannot be changed.
+      </small>
+      <small class="status-hint" *ngIf="canChangeStatus">
+        <i class="pi pi-info-circle"></i>
+        You can only mark this project as finished.
+      </small>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <app-button
+      label="Cancel"
+      icon="pi pi-times"
+      severity="secondary"
+      [text]="true"
+      (onClick)="cancel()"
+    ></app-button>
+    <app-button
+      [label]="mode === 'create' ? 'Create' : 'Update'"
+      icon="pi pi-check"
+      severity="primary"
+      [disabled]="!isFormValid"
+      (onClick)="save()"
+    ></app-button>
+  </ng-template>
+</p-dialog>

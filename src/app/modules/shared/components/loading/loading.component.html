@@ -1,0 +1,23 @@
+<p-blockUI [blocked]="visible && overlay">
+  <div class="loading-overlay" *ngIf="visible">
+    <div class="loading-content">
+      <p-progressSpinner
+        [strokeWidth]="strokeWidth"
+        [animationDuration]="animationDuration"
+        [style]="{ width: '100px', height: '100px' }"
+        styleClass="custom-spinner"
+      ></p-progressSpinner>
+      <p class="loading-message" *ngIf="message">{{ message }}</p>
+    </div>
+  </div>
+</p-blockUI>
+
+<div class="loading-inline" *ngIf="visible && !overlay">
+  <p-progressSpinner
+    [strokeWidth]="strokeWidth"
+    [animationDuration]="animationDuration"
+    [style]="{ width: '60px', height: '60px' }"
+    styleClass="custom-spinner"
+  ></p-progressSpinner>
+  <p class="loading-message" *ngIf="message">{{ message }}</p>
+</div>

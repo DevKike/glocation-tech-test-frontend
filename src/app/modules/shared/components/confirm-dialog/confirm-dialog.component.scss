@@ -1,0 +1,33 @@
+::ng-deep {
+    .p-confirm-dialog {
+        .p-dialog-header {
+            padding: 1.5rem;
+        }
+
+        .p-confirm-dialog-icon {
+            font-size: 2.5rem;
+            color: #f59e0b;
+        }
+
+        .p-confirm-dialog-message {
+            font-size: 1rem;
+            margin-left: 1rem;
+            line-height: 1.5;
+        }
+
+        .p-button-danger {
+            background: #ef4444;
+            border-color: #ef4444;
+            font-weight: 600;
+
+            &:hover {
+                background: #dc2626;
+                border-color: #dc2626;
+            }
+        }
+
+        .p-button-text {
+            font-weight: 600;
+        }
+    }
+}

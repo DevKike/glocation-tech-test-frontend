@@ -1,0 +1,13 @@
+<div
+  class="card-wrapper"
+  [style.width]="width"
+  [style.height]="height"
+  [style.padding]="padding"
+>
+  <p-card [header]="header">
+    <ng-template pTemplate="subtitle" *ngIf="subheader">
+      <p class="card-subtitle">{{ subheader }}</p>
+    </ng-template>
+    <ng-content></ng-content>
+  </p-card>
+</div>
