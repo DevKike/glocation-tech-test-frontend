@@ -3,4 +3,27 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    width: 100%;
+    overflow: hidden;
+
+    ::ng-deep {
+        canvas {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-wrapper {
+        padding: 0.5rem;
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-wrapper {
+        padding: 0.25rem;
+        min-height: 200px;
+    }
 }

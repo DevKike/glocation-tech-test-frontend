@@ -25,33 +25,54 @@ export class ChartComponent implements OnChanges {
   getDefaultOptions() {
     return {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
+      aspectRatio: window.innerWidth < 768 ? 1.5 : 2,
       plugins: {
         legend: {
           position: 'bottom',
           labels: {
             font: {
               family: 'Poppins',
-              size: 12,
+              size: window.innerWidth < 768 ? 10 : 12,
             },
-            padding: 15,
+            padding: window.innerWidth < 768 ? 10 : 15,
             usePointStyle: true,
+            boxWidth: window.innerWidth < 768 ? 8 : 12,
           },
         },
         tooltip: {
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          padding: 12,
+          padding: window.innerWidth < 768 ? 8 : 12,
           bodyFont: {
             family: 'Poppins',
-            size: 13,
+            size: window.innerWidth < 768 ? 11 : 13,
           },
           titleFont: {
             family: 'Poppins',
-            size: 14,
+            size: window.innerWidth < 768 ? 12 : 14,
             weight: 'bold',
           },
         },
       },
+      scales:
+        this.type === 'bar' || this.type === 'line'
+          ? {
+              y: {
+                ticks: {
+                  font: {
+                    size: window.innerWidth < 768 ? 9 : 11,
+                  },
+                },
+              },
+              x: {
+                ticks: {
+                  font: {
+                    size: window.innerWidth < 768 ? 9 : 11,
+                  },
+                },
+              },
+            }
+          : undefined,
     };
   }
 }
